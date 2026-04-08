@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Financiero | Retail Perú | Marzo 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0D1B2A;
+    --blue-dark: #1B4F72;
+    --blue-mid: #1B3A6B;
+    --blue-light-bg: #D6EAF8;
+    --blue-light-text: #2E86C1;
+    --green-bg: #D5F5E3;
+    --green-text: #1E8449;
+    --green-dark: #166534;
+    --red-bg: #FADBD8;
+    --red-text: #C0392B;
+    --red-dark: #991B1B;
+    --yellow-bg: #FEF9E7;
+    --yellow-text: #D4AC0D;
+    --gray-light: #F2F3F4;
+    --gray-ultra: #F9FAFB;
+    --gray-mid: #374151;
+    --gray-border: #E5E7EB;
+    --blue-row: #F0F4FF;
+    --white: #ffffff;
+    --font-main: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f0f2f5;
+    font-family: var(--font-main);
+    color: var(--navy);
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .page {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.12);
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--navy);
+    color: white;
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-title {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .header-date {
+    font-size: 11px;
+    color: #8eadc4;
+    font-family: var(--font-mono);
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    background: var(--blue-dark);
+    color: white;
+    padding: 7px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .section-header-alt {
+    background: var(--blue-mid);
+    color: white;
+    padding: 7px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  /* KPI SECTION */
+  .kpi-section { padding: 0; }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 2px solid var(--gray-border);
+  }
+  .kpi-card {
+    padding: 14px 12px 10px;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.6);
+  }
+  .kpi-card:last-child { border-right: none; }
+  .kpi-label {
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .kpi-value {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kpi-sub {
+    font-size: 8px;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  /* THREE COLUMN LAYOUT */
+  .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 2px solid var(--gray-border);
+  }
+  .col-block { border-right: 1px solid var(--gray-border); }
+  .col-block:last-child { border-right: none; }
+
+  /* TABLES */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
+  }
+  th {
+    background: var(--gray-light);
+    color: var(--blue-dark);
+    font-weight: 700;
+    padding: 5px 8px;
+    text-align: center;
+    font-size: 9px;
+    border-bottom: 1px solid var(--gray-border);
+  }
+  th.left { text-align: left; }
+  td {
+    padding: 4px 8px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  td.left { text-align: left; }
+  td.right { text-align: right; }
+  td.center { text-align: center; }
+  .row-total td {
+    background: var(--blue-dark) !important;
+    color: white !important;
+    font-weight: 700;
+  }
+  .row-alt { background: var(--gray-light); }
+  .row-white { background: white; }
+
+  /* TWO COLUMN LAYOUT */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 2px solid var(--gray-border);
+  }
+  .half-block { border-right: 1px solid var(--gray-border); }
+  .half-block:last-child { border-right: none; }
+
+  /* EVOLUCIÓN MENSUAL */
+  .evol-wrap {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    border-bottom: 2px solid var(--gray-border);
+  }
+  .evol-table-wrap { overflow-x: auto; }
+  .evol-recep-wrap { border-left: 1px solid var(--gray-border); }
+
+  /* INVENTARIO */
+  .inv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 2px solid var(--gray-border);
+  }
+  .inv-block { border-right: 1px solid var(--gray-border); }
+  .inv-block:last-child { border-right: none; }
+
+  /* FLUJO */
+  .flujo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 2px solid var(--gray-border);
+  }
+  .flujo-block { border-right: 1px solid var(--gray-border); }
+  .flujo-block:last-child { border-right: none; }
+
+  /* COLORS */
+  .bg-blue-light { background: var(--blue-light-bg); }
+  .bg-green { background: var(--green-bg); }
+  .bg-red { background: var(--red-bg); }
+  .bg-yellow { background: var(--yellow-bg); }
+  .bg-row-blue { background: var(--blue-row); }
+  .c-blue { color: var(--blue-light-text); }
+  .c-green { color: var(--green-text); }
+  .c-red { color: var(--red-text); }
+  .c-yellow { color: var(--yellow-text); }
+  .c-green-dark { color: var(--green-dark); }
+  .c-red-dark { color: var(--red-dark); }
+
+  .num-pos { color: var(--green-dark); }
+  .num-neg { color: var(--red-dark); }
+
+  .proy-badge {
+    display: inline-block;
+    background: #e0e7ff;
+    color: #3730a3;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .footnote {
+    padding: 6px 14px;
+    font-size: 8px;
+    color: #6B7280;
+    font-style: italic;
+    background: var(--gray-ultra);
+    border-top: 1px solid var(--gray-border);
+  }
+
+  .note-inline {
+    font-size: 8px;
+    color: #6B7280;
+    font-style: italic;
+    padding: 3px 8px;
+  }
+
+  /* MINI CHART BAR */
+  .bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 0;
+  }
+  .bar-bg {
+    flex: 1;
+    height: 5px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--blue-dark);
+  }
+  .bar-fill.used { background: var(--red-text); }
+  .bar-pct { font-size: 8px; color: #6B7280; min-width: 28px; text-align: right; }
+
+  .section-wrap { overflow: hidden; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="header-title">DASHBOARD FINANCIERO &nbsp;|&nbsp; RETAIL PERÚ</div>
+      <div class="header-date" style="margin-top:4px;">Posición al 7-Abril-2026 &nbsp;·&nbsp; Marzo 2026</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:10px;color:#8eadc4;font-family:var(--font-mono);">FC Retail PE v2</div>
+      <div style="font-size:9px;color:#5a7a90;margin-top:3px;">Proyección Actualizada</div>
+    </div>
+  </div>
+
+  <!-- ═══ KPIs ═══ -->
+  <div class="section-header">▌ INDICADORES CLAVE</div>
+  <div class="kpi-grid">
+    <div class="kpi-card bg-blue-light">
+      <div class="kpi-label c-blue">Caja Actual<br>(S/ MM)</div>
+      <div class="kpi-value c-blue">49.93</div>
+      <div class="kpi-sub">Saldo disponible hoy</div>
+    </div>
+    <div class="kpi-card bg-blue-light">
+      <div class="kpi-label c-blue">Caja Proyec.<br>1 Semana (S/ MM)</div>
+      <div class="kpi-value c-blue">63.62</div>
+      <div class="kpi-sub">S/ Miles</div>
+    </div>
+    <div class="kpi-card bg-red">
+      <div class="kpi-label c-red">Caja Cierre<br>Mes (S/ MM)</div>
+      <div class="kpi-value c-red">52.19</div>
+      <div class="kpi-sub">&nbsp;</div>
+    </div>
+    <div class="kpi-card bg-green">
+      <div class="kpi-label c-green">Ventas Acum.<br>a Marzo (S/ MM)</div>
+      <div class="kpi-value c-green">560.29</div>
+      <div class="kpi-sub">vs Presupuesto ▲62</div>
+    </div>
+    <div class="kpi-card bg-green">
+      <div class="kpi-label c-green">Ventas Mes<br>de Marzo (S/ MM)</div>
+      <div class="kpi-value c-green">210.76</div>
+      <div class="kpi-sub">&nbsp;</div>
+    </div>
+    <div class="kpi-card bg-red">
+      <div class="kpi-label c-red">Flujo Oper. Acum.<br>Post Capex (S/ MM)</div>
+      <div class="kpi-value c-red">(50.05)</div>
+      <div class="kpi-sub">&nbsp;</div>
+    </div>
+    <div class="kpi-card bg-yellow">
+      <div class="kpi-label c-yellow">Deuda Total CP<br>(S/ MM)</div>
+      <div class="kpi-value c-yellow">239.7</div>
+      <div class="kpi-sub">Capital de Trabajo (S/ MM)</div>
+    </div>
+  </div>
+
+  <!-- ═══ 3 COLS: INVERSIONES | LÍNEAS | VENCIMIENTOS ═══ -->
+  <div class="three-col">
+
+    <!-- INVERSIONES -->
+    <div class="col-block section-wrap">
+      <div class="section-header">▌ INVERSIONES VIGENTES (S/ MM)</div>
+      <table>
+        <thead><tr>
+          <th class="left">Institución</th>
+          <th>Monto PEN</th>
+          <th>USD</th>
+          <th>Tasa%</th>
+        </tr></thead>
+        <tbody>
+          <tr class="row-white"><td class="left">Cta. Remun. BIF</td><td class="right">5.25</td><td class="right">0</td><td class="right">3.90%</td></tr>
+          <tr class="row-alt"><td class="left">Cta. Remun. Santander</td><td class="right">5.88</td><td class="right">0</td><td class="right">3.58%</td></tr>
+          <tr class="row-white"><td class="left">Cta. Remun. BCI</td><td class="right">36.22</td><td class="right">0</td><td class="right">3.90%</td></tr>
+          <tr class="row-total"><td class="left">TOTAL</td><td class="right">47.35</td><td class="right">0</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- LÍNEAS -->
+    <div class="col-block section-wrap">
+      <div class="section-header">▌ LÍNEAS DE CRÉDITO (S/ MM)</div>
+      <table>
+        <thead><tr>
+          <th class="left">Banco</th>
+          <th>Total</th>
+          <th>Usado</th>
+          <th>Libre</th>
+          <th>%Uso</th>
+        </tr></thead>
+        <tbody>
+          <tr class="row-white">
+            <td class="left">BBVA</td><td class="right">24.5</td><td class="right">0</td><td class="right">24.5</td>
+            <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill used" style="width:0%"></div></div><span class="bar-pct">0%</span></div></td>
+          </tr>
+          <tr class="row-alt">
+            <td class="left">BCP</td><td class="right">122.5</td><td class="right">122.5</td><td class="right">0</td>
+            <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill used" style="width:100%"></div></div><span class="bar-pct">100%</span></div></td>
+          </tr>
+          <tr class="row-white">
+            <td class="left">INTERBANK</td><td class="right">63.0</td><td class="right">30.0</td><td class="right">33.0</td>
+            <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill used" style="width:48%"></div></div><span class="bar-pct">48%</span></div></td>
+          </tr>
+          <tr class="row-alt">
+            <td class="left">SCOTIABANK</td><td class="right">72.1</td><td class="right">33.5</td><td class="right">38.6</td>
+            <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill used" style="width:46%"></div></div><span class="bar-pct">46%</span></div></td>
+          </tr>
+          <tr class="row-white">
+            <td class="left">BANBIF</td><td class="right">27.2</td><td class="right">26.5</td><td class="right">0.7</td>
+            <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill used" style="width:97%"></div></div><span class="bar-pct">97%</span></div></td>
+          </tr>
+          <tr class="row-alt">
+            <td class="left">SANTANDER</td><td class="right">10.5</td><td class="right">0</td><td class="right">10.5</td>
+            <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill used" style="width:0%"></div></div><span class="bar-pct">0%</span></div></td>
+          </tr>
+          <tr class="row-white">
+            <td class="left">BCI</td><td class="right">52.5</td><td class="right">0</td><td class="right">52.5</td>
+            <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill used" style="width:0%"></div></div><span class="bar-pct">0%</span></div></td>
+          </tr>
+          <tr class="row-alt">
+            <td class="left">PICHINCHA</td><td class="right">28.0</td><td class="right">27.2</td><td class="right">0.8</td>
+            <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill used" style="width:97%"></div></div><span class="bar-pct">97%</span></div></td>
+          </tr>
+          <tr class="row-white">
+            <td class="left">CITIBANK</td><td class="right">24.5</td><td class="right">0</td><td class="right">24.5</td>
+            <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill used" style="width:0%"></div></div><span class="bar-pct">0%</span></div></td>
+          </tr>
+          <tr class="row-total"><td class="left">TOTAL</td><td class="right">424.8</td><td class="right">239.7</td><td class="right">185.1</td><td><span style="font-family:var(--font-mono)">56.4%</span></td></tr>
+        </tbody>
+      </table>
+      <div class="note-inline">*No incluye el mediano plazo de IBK de 60 MM de soles.</div>
+    </div>
+
+    <!-- VENCIMIENTOS -->
+    <div class="col-block section-wrap">
+      <div class="section-header">▌ VENCIMIENTOS BANCARIOS</div>
+      <table>
+        <thead><tr>
+          <th class="left">Entidad</th>
+          <th>Vencimiento</th>
+          <th>Mon.</th>
+          <th>Monto S/ (MM)</th>
+          <th>Tasa%</th>
+        </tr></thead>
+        <tbody>
+          <tr class="row-white"><td class="left">IBK</td><td class="center">10-Abr-26</td><td class="center">PEN</td><td class="right">30.0</td><td class="right">4.44%</td></tr>
+          <tr class="row-alt"><td class="left">BANBIF</td><td class="center">15-Abr-26</td><td class="center">PEN</td><td class="right">26.5</td><td class="right">4.35%</td></tr>
+          <tr class="row-white"><td class="left">BCP</td><td class="center">18-May-26</td><td class="center">PEN</td><td class="right">122.5</td><td class="right">4.43%</td></tr>
+          <tr class="row-alt"><td class="left">SCOTIABANK</td><td class="center">24-Abr-26</td><td class="center">PEN</td><td class="right">33.5</td><td class="right">4.44%</td></tr>
+          <tr class="row-white"><td class="left">PICHINCHA</td><td class="center">23-Sep-26</td><td class="center">PEN</td><td class="right">27.2</td><td class="right">4.50%</td></tr>
+          <tr class="row-alt"><td class="left">IBK (med. plazo)</td><td class="center">26-Feb-27</td><td class="center">PEN</td><td class="right">60.0</td><td class="right">4.67%</td></tr>
+          <tr class="row-total"><td class="left">TOTAL</td><td></td><td></td><td class="right">299.7</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ EVOLUCIÓN MENSUAL ═══ -->
+  <div class="section-header-alt">▌ EVOLUCIÓN MENSUAL &nbsp;|&nbsp; Ingresos, Egresos, Flujo Operacional, Caja y Deuda &nbsp;(S/ MM)</div>
+  <div style="display:grid;grid-template-columns:auto 1fr;border-bottom:2px solid var(--gray-border);">
+    <div style="min-width:420px;border-right:1px solid var(--gray-border);">
+      <table>
+        <thead><tr>
+          <th class="left">Período</th>
+          <th>Ingresos</th>
+          <th>Egresos</th>
+          <th>Margen%</th>
+          <th>Flujo Oper.</th>
+          <th>Caja Final</th>
+          <th>Deuda Total</th>
+        </tr></thead>
+        <tbody>
+          <tr class="row-white"><td class="left">Ene-25</td><td class="right">161.36</td><td class="right">215.08</td><td class="right num-neg">(33.3%)</td><td class="right num-neg bg-red">(53.71)</td><td class="right">85.54</td><td class="right">0</td></tr>
+          <tr class="row-alt"><td class="left">Feb-25</td><td class="right">151.25</td><td class="right">182.91</td><td class="right num-neg">(20.9%)</td><td class="right num-neg bg-red">(31.66)</td><td class="right">40.69</td><td class="right">0</td></tr>
+          <tr class="row-white"><td class="left">Mar-25</td><td class="right">177.98</td><td class="right">169.14</td><td class="right num-pos">5.0%</td><td class="right num-pos bg-green">8.85</td><td class="right">44.70</td><td class="right">0</td></tr>
+          <tr class="row-alt"><td class="left">Abr-25</td><td class="right">179.25</td><td class="right">179.78</td><td class="right num-neg">(0.3%)</td><td class="right num-pos bg-green">(0.52)</td><td class="right">36.07</td><td class="right">0</td></tr>
+          <tr class="row-white"><td class="left">May-25</td><td class="right">198.19</td><td class="right">183.23</td><td class="right num-pos">7.5%</td><td class="right num-pos bg-green">14.96</td><td class="right">59.30</td><td class="right">0</td></tr>
+          <tr class="row-alt"><td class="left">Jun-25</td><td class="right">204.82</td><td class="right">172.36</td><td class="right num-pos">15.8%</td><td class="right num-neg bg-red">32.46</td><td class="right">93.22</td><td class="right">0</td></tr>
+          <tr class="row-white"><td class="left">Jul-25</td><td class="right">217.05</td><td class="right">182.97</td><td class="right num-pos">15.7%</td><td class="right num-pos bg-green">34.08</td><td class="right">110.41</td><td class="right">30</td></tr>
+          <tr class="row-alt"><td class="left">Ago-25</td><td class="right">150.82</td><td class="right">192.62</td><td class="right num-neg">(27.7%)</td><td class="right num-neg bg-red">(41.80)</td><td class="right">9.80</td><td class="right">45</td></tr>
+          <tr class="row-white"><td class="left">Sep-25</td><td class="right">181.79</td><td class="right">172.78</td><td class="right num-pos">5.0%</td><td class="right num-pos bg-green">9.01</td><td class="right">50.05</td><td class="right">120</td></tr>
+          <tr class="row-alt"><td class="left">Oct-25</td><td class="right">151.33</td><td class="right">157.18</td><td class="right num-neg">(3.9%)</td><td class="right num-neg bg-red">(5.85)</td><td class="right">38.25</td><td class="right">155</td></tr>
+          <tr class="row-white"><td class="left">Nov-25</td><td class="right">197.07</td><td class="right">171.36</td><td class="right num-pos">13.0%</td><td class="right num-neg bg-red">25.72</td><td class="right">0</td><td class="right">467</td></tr>
+          <tr class="row-alt"><td class="left">Dic-25</td><td class="right">433.68</td><td class="right">212.85</td><td class="right num-pos">50.9%</td><td class="right num-pos bg-green">220.83</td><td class="right">342.03</td><td class="right">0</td></tr>
+          <tr class="row-white"><td class="left">Ene-26</td><td class="right">181.99</td><td class="right">220.27</td><td class="right num-neg">(21.0%)</td><td class="right num-neg bg-red">(38.28)</td><td class="right">19.58</td><td class="right">20</td></tr>
+          <tr class="row-alt"><td class="left">Feb-26</td><td class="right">173.11</td><td class="right">195.99</td><td class="right num-neg">(13.2%)</td><td class="right num-neg bg-red">(22.88)</td><td class="right">20.40</td><td class="right">90</td></tr>
+          <tr class="row-white"><td class="left" style="font-weight:700;">Mar-26</td><td class="right" style="font-weight:700;">210.76</td><td class="right" style="font-weight:700;">199.64</td><td class="right num-pos" style="font-weight:700;">5.3%</td><td class="right num-pos bg-green" style="font-weight:700;">11.12</td><td class="right" style="font-weight:700;">52.19</td><td class="right" style="font-weight:700;">299.7</td></tr>
+          <tr style="background:var(--navy);color:white;font-weight:700;">
+            <td class="left" style="color:white;padding:5px 8px;">TOTAL / PROM</td>
+            <td class="right" style="color:white;">198.03</td>
+            <td class="right" style="color:white;">187.21</td>
+            <td class="right" style="color:white;">(2.1%)</td>
+            <td class="right" style="color:white;">10.82</td>
+            <td class="right" style="color:white;">66.82</td>
+            <td class="right" style="color:white;">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RECEPCIONES Y VENTAS -->
+    <div>
+      <div class="section-header-alt" style="font-size:9px;">RECEPCIONES Y VENTAS REALES vs PRESUPUESTO 2026 &nbsp;(S/ Miles)</div>
+      <table>
+        <thead><tr>
+          <th class="left">Mes</th>
+          <th>Recep. Ppto</th>
+          <th>Recep. Real</th>
+          <th>Diferencia</th>
+          <th>Venta Ppto</th>
+          <th>Venta Real</th>
+          <th>Var. Venta</th>
+        </tr></thead>
+        <tbody>
+          <tr class="row-alt"><td>Enero</td><td class="right">166,170</td><td class="right">150,986</td><td class="right num-neg">(15,184)</td><td class="right">191,556</td><td class="right">222,355</td><td class="right num-pos">+30,799</td></tr>
+          <tr class="row-white"><td>Febrero</td><td class="right">130,234</td><td class="right">135,045</td><td class="right num-pos">+4,811</td><td class="right">149,705</td><td class="right">167,940</td><td class="right num-pos">+18,235</td></tr>
+          <tr class="row-alt"><td>Marzo</td><td class="right">163,156</td><td class="right">163,247</td><td class="right num-pos">+91</td><td class="right">157,354</td><td class="right">169,993</td><td class="right num-pos">+12,640</td></tr>
+          <tr class="row-white"><td>Abril</td><td class="right">185,745</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td><td class="right">224,542</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td></tr>
+          <tr class="row-alt"><td>Mayo</td><td class="right">127,937</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td><td class="right">194,785</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td></tr>
+          <tr class="row-white"><td>Junio</td><td class="right">157,626</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td><td class="right">191,240</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td></tr>
+          <tr class="row-alt"><td>Julio</td><td class="right">166,957</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td><td class="right">248,055</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td></tr>
+          <tr class="row-white"><td>Agosto</td><td class="right">111,159</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td><td class="right">153,808</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td></tr>
+          <tr class="row-alt"><td>Septiembre</td><td class="right">126,097</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td><td class="right">155,682</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td></tr>
+          <tr class="row-white"><td>Octubre</td><td class="right">233,206</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td><td class="right">174,071</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td></tr>
+          <tr class="row-alt"><td>Noviembre</td><td class="right">178,255</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td><td class="right">211,913</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td></tr>
+          <tr class="row-white"><td>Diciembre</td><td class="right">126,979</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td><td class="right">341,868</td><td class="center"><span class="proy-badge">Proy.</span></td><td class="center">—</td></tr>
+          <tr style="background:var(--gray-border);font-weight:700;">
+            <td class="left" style="padding:5px 8px;">TOTAL</td>
+            <td class="right">1,873,520</td>
+            <td class="right">449,278</td>
+            <td class="right num-pos">+61,674</td>
+            <td class="right">2,394,577</td>
+            <td class="right">560,288</td>
+            <td class="right num-pos">+61,674</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="footnote">* Recepciones: costo de mercadería ingresada al almacén (curva comercial sin consignación). Abril–Dic 2026 son proyecciones presupuestadas.</div>
+    </div>
+  </div>
+
+  <!-- ═══ INVENTARIO Y LIQUIDEZ ═══ -->
+  <div class="section-header-alt">▌ INVENTARIO Y LIQUIDEZ &nbsp;(Millones de Soles) &nbsp;—&nbsp; Semanal W14 2026</div>
+  <div style="border-bottom:2px solid var(--gray-border);">
+    <table>
+      <thead><tr>
+        <th class="left" style="width:120px;">Concepto</th>
+        <th class="left" style="width:70px;">Tipo</th>
+        <th>Ppto. Semanal</th>
+        <th>Real Semanal</th>
+        <th>Variación</th>
+        <th style="width:20px;background:#e8ecf0;"></th>
+        <th>Ppto. Acum.</th>
+        <th>Real Acum.</th>
+        <th>Var. Acum.</th>
+      </tr></thead>
+      <tbody>
+        <tr class="bg-row-blue" style="font-weight:700;">
+          <td class="left" style="font-weight:700;">Stock Inicial</td><td class="left" style="font-weight:700;">Total</td>
+          <td class="right">563,884</td><td class="right">504,868</td><td class="right num-neg">(59,016)</td>
+          <td style="background:#e8ecf0;"></td>
+          <td class="right">7,176,818</td><td class="right">6,662,149</td><td class="right num-neg">(514,668)</td>
+        </tr>
+        <tr class="row-white"><td></td><td class="left">Nacional</td><td class="right">379,678</td><td class="right">349,934</td><td class="right num-neg">(29,744)</td><td style="background:#e8ecf0;"></td><td class="right">4,993,715</td><td class="right">4,717,295</td><td class="right num-neg">(276,420)</td></tr>
+        <tr class="row-alt"><td></td><td class="left">Import.</td><td class="right">184,206</td><td class="right">154,934</td><td class="right num-neg">(29,271)</td><td style="background:#e8ecf0;"></td><td class="right">2,183,103</td><td class="right">1,944,854</td><td class="right num-neg">(238,248)</td></tr>
+
+        <tr class="bg-row-blue" style="font-weight:700;">
+          <td class="left" style="font-weight:700;">Recepciones</td><td class="left" style="font-weight:700;">Total</td>
+          <td class="right">45,270</td><td class="right">31,665</td><td class="right num-neg">(13,605)</td>
+          <td style="background:#e8ecf0;"></td>
+          <td class="right">504,829</td><td class="right">480,943</td><td class="right num-neg">(23,886)</td>
+        </tr>
+        <tr class="row-white"><td></td><td class="left">Nacional</td><td class="right">33,893</td><td class="right">21,737</td><td class="right num-neg">(12,155)</td><td style="background:#e8ecf0;"></td><td class="right">358,126</td><td class="right">358,841</td><td class="right num-pos">+715</td></tr>
+        <tr class="row-alt"><td></td><td class="left">Import.</td><td class="right">11,377</td><td class="right">9,928</td><td class="right num-neg">(1,449)</td><td style="background:#e8ecf0;"></td><td class="right">146,702</td><td class="right">122,101</td><td class="right num-neg">(24,601)</td></tr>
+
+        <tr class="bg-row-blue" style="font-weight:700;">
+          <td class="left" style="font-weight:700;">Venta (costo)</td><td class="left" style="font-weight:700;">Total</td>
+          <td class="right">(26,261)</td><td class="right">(30,506)</td><td class="right num-neg">(4,245)</td>
+          <td style="background:#e8ecf0;"></td>
+          <td class="right">(424,295)</td><td class="right">(453,662)</td><td class="right num-neg">(29,367)</td>
+        </tr>
+        <tr class="row-white"><td></td><td class="left">Nacional</td><td class="right">(20,487)</td><td class="right">(23,622)</td><td class="right num-neg">(3,135)</td><td style="background:#e8ecf0;"></td><td class="right">(323,155)</td><td class="right">(347,545)</td><td class="right num-neg">(24,389)</td></tr>
+        <tr class="row-alt"><td></td><td class="left">Import.</td><td class="right">(5,774)</td><td class="right">(6,884)</td><td class="right num-pos c-green-dark">(1,110)</td><td style="background:#e8ecf0;"></td><td class="right">(101,140)</td><td class="right">(106,117)</td><td class="right num-neg">(4,977)</td></tr>
+
+        <tr class="bg-row-blue" style="font-weight:700;">
+          <td class="left" style="font-weight:700;">Venta (PVP)</td><td class="left" style="font-weight:700;">Total</td>
+          <td class="right">35,732</td><td class="right">40,804</td><td class="right num-pos c-green-dark">+5,071</td>
+          <td style="background:#e8ecf0;"></td>
+          <td class="right">534,347</td><td class="right">601,092</td><td class="right num-pos c-green-dark">+66,745</td>
+        </tr>
+        <tr class="row-white"><td></td><td class="left">Nacional</td><td class="right">25,309</td><td class="right">28,161</td><td class="right num-pos c-green-dark">+2,851</td><td style="background:#e8ecf0;"></td><td class="right">361,238</td><td class="right">409,386</td><td class="right num-pos c-green-dark">+48,148</td></tr>
+        <tr class="row-alt"><td></td><td class="left">Import.</td><td class="right">10,423</td><td class="right">12,643</td><td class="right num-neg c-red-dark">+2,220</td><td style="background:#e8ecf0;"></td><td class="right">173,108</td><td class="right">191,706</td><td class="right num-pos c-green-dark">+18,597</td></tr>
+
+        <tr class="bg-row-blue" style="font-weight:700;">
+          <td class="left" style="font-weight:700;">Stock Final</td><td class="left" style="font-weight:700;">Total</td>
+          <td class="right">618,624</td><td class="right">546,830</td><td class="right num-neg">(71,794)</td>
+          <td style="background:#e8ecf0;"></td>
+          <td class="right">7,791,698</td><td class="right">7,290,522</td><td class="right num-neg">(501,176)</td>
+        </tr>
+        <tr class="row-white"><td></td><td class="left">Nacional</td><td class="right">418,393</td><td class="right">376,210</td><td class="right num-neg">(42,183)</td><td style="background:#e8ecf0;"></td><td class="right">5,389,924</td><td class="right">5,137,978</td><td class="right num-neg">(251,946)</td></tr>
+        <tr class="row-alt"><td></td><td class="left">Import.</td><td class="right">200,232</td><td class="right">170,620</td><td class="right num-neg">(29,611)</td><td style="background:#e8ecf0;"></td><td class="right">2,401,774</td><td class="right">2,152,544</td><td class="right num-neg">(249,229)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══ REPORTE FLUJO ═══ -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;">
+    <div style="border-right:1px solid var(--gray-border);">
+      <div class="section-header-alt">REPORTE FLUJO MENSUAL — Acumulado Abril 2026 &nbsp;(S/ MM)</div>
+      <table>
+        <thead><tr>
+          <th class="left">Concepto</th>
+          <th>Real</th>
+          <th>Ppto.</th>
+          <th>Variación</th>
+        </tr></thead>
+        <tbody>
+          <tr class="bg-row-blue" style="font-weight:700;"><td class="left">Ingresos por ventas</td><td class="right">743.10</td><td class="right">692.73</td><td class="right num-pos">+50.37</td></tr>
+          <tr class="row-white"><td class="left">Egresos</td><td class="right">(897.34)</td><td class="right">(866.50)</td><td class="right num-pos">(30.84)</td></tr>
+          <tr class="row-alt"><td class="left">&nbsp;&nbsp;Proveedores</td><td class="right">(626.52)</td><td class="right">(653.11)</td><td class="right num-pos">+26.58</td></tr>
+          <tr class="row-white"><td class="left">&nbsp;&nbsp;RRHH</td><td class="right">(60.63)</td><td class="right">(84.92)</td><td class="right num-pos">+24.29</td></tr>
+          <tr class="row-alt"><td class="left">&nbsp;&nbsp;GAV</td><td class="right">(127.19)</td><td class="right">(82.19)</td><td class="right num-neg">(45.00)</td></tr>
+          <tr class="row-white"><td class="left">&nbsp;&nbsp;Impuestos</td><td class="right">(80.59)</td><td class="right">(43.87)</td><td class="right num-neg">(36.72)</td></tr>
+          <tr class="row-alt"><td class="left">&nbsp;&nbsp;Capex</td><td class="right">(2.41)</td><td class="right">(2.41)</td><td class="right">0</td></tr>
+          <tr class="bg-row-blue" style="font-weight:700;"><td class="left">Flujo Oper. post CAPEX</td><td class="right">(154.24)</td><td class="right">(173.77)</td><td class="right num-pos">+19.53</td></tr>
+          <tr class="row-white"><td class="left">Flujo no operacional</td><td class="right">(171.65)</td><td class="right">0.77</td><td class="right num-neg">(172.42)</td></tr>
+          <tr class="row-alt"><td class="left">Variación de caja</td><td class="right">(325.89)</td><td class="right">(173.00)</td><td class="right num-neg">(152.89)</td></tr>
+          <tr class="row-white"><td class="left">Caja inicial</td><td class="right">342.03</td><td class="right">342.03</td><td class="right">0</td></tr>
+          <tr class="bg-row-blue" style="font-weight:700;"><td class="left">Caja final</td><td class="right">16.15</td><td class="right">169.04</td><td class="right num-neg">(152.89)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="section-header-alt">REPORTE FLUJO — Mes Abril 2026 &nbsp;(S/ MM)</div>
+      <table>
+        <thead><tr>
+          <th class="left">Concepto</th>
+          <th>Real</th>
+          <th>Ppto.</th>
+          <th>Variación</th>
+        </tr></thead>
+        <tbody>
+          <tr class="bg-row-blue" style="font-weight:700;"><td class="left">Ingresos por ventas</td><td class="right">177.24</td><td class="right">186.12</td><td class="right num-neg">(8.89)</td></tr>
+          <tr class="row-white"><td class="left">Egresos</td><td class="right">(213.28)</td><td class="right">(230.28)</td><td class="right num-pos">+17.00</td></tr>
+          <tr class="row-alt"><td class="left">&nbsp;&nbsp;Proveedores</td><td class="right">(163.93)</td><td class="right">(174.19)</td><td class="right num-neg">+10.26</td></tr>
+          <tr class="row-white"><td class="left">&nbsp;&nbsp;RRHH</td><td class="right">(9.70)</td><td class="right">(22.41)</td><td class="right num-pos">+12.71</td></tr>
+          <tr class="row-alt"><td class="left">&nbsp;&nbsp;GAV</td><td class="right">(24.80)</td><td class="right">(21.00)</td><td class="right num-neg">(3.80)</td></tr>
+          <tr class="row-white"><td class="left">&nbsp;&nbsp;Impuestos</td><td class="right">(14.25)</td><td class="right">(12.07)</td><td class="right num-neg">(2.18)</td></tr>
+          <tr class="row-alt"><td class="left">&nbsp;&nbsp;Capex</td><td class="right">(0.60)</td><td class="right">(0.60)</td><td class="right">0</td></tr>
+          <tr class="bg-row-blue" style="font-weight:700;"><td class="left">Flujo Oper. post CAPEX</td><td class="right">(36.05)</td><td class="right">(44.16)</td><td class="right num-pos">+8.11</td></tr>
+          <tr class="row-white"><td class="left">Flujo no operacional</td><td class="right">(0.00)</td><td class="right">0.15</td><td class="right num-neg">(0.15)</td></tr>
+          <tr class="row-alt"><td class="left">Variación de caja</td><td class="right">(36.05)</td><td class="right">(44.01)</td><td class="right num-pos">+7.96</td></tr>
+          <tr class="row-white"><td class="left">Caja inicial</td><td class="right">52.19</td><td class="right">204.97</td><td class="right num-neg">(152.78)</td></tr>
+          <tr class="bg-row-blue" style="font-weight:700;"><td class="left">Caja final</td><td class="right">16.15</td><td class="right">160.96</td><td class="right num-neg">(144.82)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="background:var(--navy);color:#8eadc4;padding:10px 28px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-family:var(--font-mono);font-size:9px;">FC Retail PE v2 &nbsp;·&nbsp; Dashboard Finanzas</span>
+    <span style="font-family:var(--font-mono);font-size:9px;">Actualizado: 07-Abr-2026</span>
+    <span style="font-family:var(--font-mono);font-size:9px;">Cifras en S/ Millones salvo indicación</span>
+  </div>
+
+</div>
+</body>
+</html>
